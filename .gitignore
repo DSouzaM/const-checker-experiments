@@ -1,0 +1,11 @@
+*.tar.gz
+*.tar.xz
+*.tar.xz.sig
+*.tgz
+/*/*/src/
+/*/*/pkg/
+/*/*/llvm-asm/
+*.ll
+!/test/src/
+/test/build/
+__pycache__/
