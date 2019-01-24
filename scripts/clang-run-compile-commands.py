@@ -43,7 +43,7 @@ def main():
 
         wait_for_queue(queue)
         print('\033[1;33m{}\033[0;33m {}\033[m'.format(cc.id, cc.file.path))
-        queue.append(spawn_process(cc.id, args.assumption))
+        queue.append(spawn_process(cc.id))
     wait_for_queue(queue)
 
 if __name__ == '__main__':
