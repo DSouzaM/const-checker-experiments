@@ -11,7 +11,7 @@ def find_compilation_commands_file(package, src_dir):
     matches = []
     for root, dirs, files in os.walk(src_dir):
         for name in files:
-            if name == 'compilation_commands.json':
+            if name == 'compile_commands.json':
                 matches.append(os.path.join(root, name))
     assert(len(matches) == 1)
     return matches[0]
@@ -25,19 +25,9 @@ def import_entry(package, src_dir, entry):
     if file_fd is None:
         return
 
-    output_fd = django_common.get_fd(package, src_dir,
-                                     os.path.join(dir, entry['output']))
-
-    if output_fd is None:
-        return
-
-    if entry['kind'] == 'compile':
-        django_cpp_doc.models.CompileCommand.objects.get_or_create(
-                package=package, file=file_fd, output=output_fd,
-                defaults={'directory': dir_fd, 'command_line': entry['arguments']})
-    if entry['kind'] == 'link':
-        django_cpp_doc.models.Linkage.objects.get_or_create(
-                package=package, file=file_fd, output=output_fd)
+    django_cpp_doc.models.CompileCommand.objects.get_or_create(
+        package=package, file=file_fd,
+        defaults={'directory': dir_fd, 'command_line': entry['arguments']})
 
 def main():
     parser = argparse.ArgumentParser('Import compilation commands.')
