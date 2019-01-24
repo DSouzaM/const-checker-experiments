@@ -3,9 +3,76 @@
 import django_common
 
 import argparse
-import django_cpp_doc.models as models
+import django_cpp_doc
+import json
+import os
+import subprocess
+import sys
+import time
 
+MAX_PROCESSES = 4
+
+def find_compilation_commands_file(package, src_dir):
+    matches = []
+    for root, dirs, files in os.walk(src_dir):
+        for name in files:
+            if name == 'compile_commands.json':
+                matches.append(os.path.join(root, name))
+    assert(len(matches) == 1)
+    return matches[0]
+
+def import_entry(package, src_dir, entry):
+    dir = entry['directory']
+    dir_fd = django_common.get_fd(package, src_dir, dir)
+    file_fd = django_common.get_fd(package, src_dir,
+                                   os.path.join(dir, entry['file']))
+
+    if file_fd is None:
+        return
+
+    django_cpp_doc.models.CompileCommand.objects.get_or_create(
+        package=package, file=file_fd,
+        defaults={'directory': dir_fd, 'command_line': entry['arguments']})
+
+def import_compile_commands(package):
+    src_dir = get_src_dir(package)
+    compilation_commands_file = find_compilation_commands_file(package, src_dir)
+    with open(compilation_commands_file, 'r') as f:
+        for entry in json.load(f):
+            import_entry(package, src_dir, entry)
+
+def spawn_process(compile_command_id):
+    env = dict(os.environ)
+    env['CONST_CHECKER_BASE_DIR'] = django_common.EXPERIMENTS_DIR
+    args = ['const-checker',
+            str(compile_command_id)]
+    return subprocess.Popen(args, env=env)
+
+def wait_for_queue(queue):
+    while len(queue) >= MAX_PROCESSES:
+        time.sleep(1)
+        for q in queue:
+            r = q.poll()
+            if r is not None:
+                queue.remove(q)
+                if r != 0:
+                    print(' '.join(q.args))
+                    sys.exit(1)
+
+def run_clang_tool(package):
+    queue = []
+    for cc in django_cpp_doc.models.CompileCommand.objects.filter(package=package):
+        if cc.file.path.endswith('.S'):
+            continue
+
+        wait_for_queue(queue)
+        print('\033[1;33m{}\033[0;33m {}\033[m'.format(cc.id, cc.file.path))
+        queue.append(spawn_process(cc.id))
+    wait_for_queue(queue)
+    
+    
 def populate_counts(package):
+    import django_cpp_doc.models as models
     for record in models.RecordDecl.objects.filter(decl__package=package):
         num_methods = 0
         num_mutable_methods = 0
@@ -231,13 +298,15 @@ def populate_counts(package):
             )
 
 def main():
-    parser = argparse.ArgumentParser('Run clang populate database.')
+    parser = argparse.ArgumentParser('Run clang compile commands.')
     parser.add_argument('slug', help='Package slug to run compile commands for')
     parser.add_argument('version', help='Package version to run compile commands for')
     args = parser.parse_args()
 
     package = django_common.get_package(args.slug, args.version)
 
+    import_compile_commands(package)
+    run_clang_tool(package)
     populate_counts(package)
 
 if __name__ == '__main__':
