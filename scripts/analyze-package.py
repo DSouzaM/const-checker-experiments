@@ -35,7 +35,7 @@ def import_entry(package, src_dir, entry):
         defaults={'directory': dir_fd, 'command_line': entry['arguments']})
 
 def import_compile_commands(package):
-    src_dir = get_src_dir(package)
+    src_dir = django_common.get_src_dir(package)
     compilation_commands_file = find_compilation_commands_file(package, src_dir)
     with open(compilation_commands_file, 'r') as f:
         for entry in json.load(f):
