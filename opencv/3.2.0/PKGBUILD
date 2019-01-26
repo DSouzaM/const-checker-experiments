@@ -48,6 +48,19 @@ _cmakeopts=('-D WITH_OPENCL=ON'
                '-D ENABLE_SSE2=OFF'
                '-D ENABLE_SSE3=OFF')
 
+prepare() {
+  sed -i 's|CODEC_FLAG_GLOBAL_HEADER|AV_CODEC_FLAG_GLOBAL_HEADER|' \
+    opencv-3.2.0/modules/videoio/src/cap_ffmpeg_impl.hpp
+  sed -i 's|AVFMT_RAWPICTURE|AVFMT_NOFILE|' \
+    opencv-3.2.0/modules/videoio/src/cap_ffmpeg_impl.hpp
+  sed -i 's|CV_Assert(image.size > 0);|CV_Assert(*(image.size) > 0);|' \
+    opencv_contrib-3.2.0/modules/stereo/src/descriptor.cpp
+  sed -i 's|CV_Assert(cost.size > 0);|CV_Assert(*(cost.size) > 0);|' \
+    opencv_contrib-3.2.0/modules/stereo/src/descriptor.cpp
+  sed -i 's|char\* str = PyString_AsString(obj);|char* str = (char*) PyString_AsString(obj);|' \
+    opencv-3.2.0/modules/python/src2/cv2.cpp
+}
+
 build() {
   cd "$srcdir/$pkgname-$pkgver"
 
