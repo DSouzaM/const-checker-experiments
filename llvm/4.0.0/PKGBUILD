@@ -70,6 +70,22 @@ prepare() {
   patch -Np0 -d tools/lldb <../lldb-gcc7.patch
   patch -Np1 -d tools/lldb <../lldb-libedit.patch
 
+  sed -i '1s/^/struct sigaltstack { void *ss_sp; int ss_flags; unsigned long ss_size; };/' \
+     projects/compiler-rt/lib/sanitizer_common/sanitizer_stoptheworld_linux_libcdep.cc \
+     projects/compiler-rt/lib/esan/esan_sideline_linux.cpp
+
+  sed -i 's|#include <sys/ustat.h>|struct ustat { daddr_t f_tfree; ino_t f_tinode; char f_fname[6]; char f_fpack[6]; };|' \
+    projects/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cc
+
+  sed -i 's|__res_state \*statp = (__res_state\*)state;|struct __res_state *statp = (struct __res_state*)state;|' \
+    projects/compiler-rt/lib/tsan/rtl/tsan_platform_linux.cc
+
+  sed -i 's|BitcodeCompiler::template |BitcodeCompiler::|' \
+    tools/lld/ELF/LTO.cpp
+
+  sed -i 's|SymbolBody::template |SymbolBody::|' \
+    tools/lld/ELF/Symbols.cpp
+
   mkdir build
 }
 
