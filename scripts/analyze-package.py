@@ -48,7 +48,8 @@ def spawn_process(compile_command_id):
     env['CONST_CHECKER_BASE_DIR'] = django_common.EXPERIMENTS_DIR
     args = ['const-checker',
             str(compile_command_id)]
-    return subprocess.Popen(args, env=env)
+    return subprocess.Popen(args, env=env,
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 def wait_for_queue(queue):
     while len(queue) >= MAX_PROCESSES:
