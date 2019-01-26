@@ -18,6 +18,8 @@ def find_compilation_commands_file(package, src_dir):
         for name in files:
             if name == 'compile_commands.json':
                 matches.append(os.path.join(root, name))
+    if package.package_name.slug == 'llvm':
+        matches = list(filter(lambda x: x.endswith('build/compile_commands.json'), matches))
     assert(len(matches) == 1)
     return matches[0]
 
