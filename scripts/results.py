@@ -184,6 +184,7 @@ def results(package):
     print('  - # non-trivial classes:', num_non_trivial_records)
     print('  - % immutable classes (developer-written): {:.0f}%'.format(100.0 * len(records_immutable_non_trivial) / num_non_trivial_records if num_non_trivial_records > 0 else 0.0))
     print('  - % unannotated classes (developer-written): {:.0f}%'.format(100.0 * len(records_all_mutating_non_trivial) / num_non_trivial_records if num_non_trivial_records > 0 else 0.0))
+
 def main():
     parser = argparse.ArgumentParser('Show results.')
     parser.add_argument('slug', help='Package slug to show results for')
