@@ -300,10 +300,57 @@ def populate_counts(package):
                 num_both_explicit_transitive_fields=num_both_explicit_transitive_fields,
             )
 
+def get_all_dependencies(method):
+    all_dependencies = set()
+    checked = set()
+    def collect(method, all_dependencies, checked):
+        if method in checked:
+            return
+        checked.add(method)
+        for dependent in method.dependencies.all():
+            all_dependencies.add(dependent.callee)
+            collect(dependent.callee, all_dependencies, checked)
+    collect(method, all_dependencies, checked)
+    return all_dependencies
+
+def check_all_dependencies(record, all_dependencies):
+    for dependent in all_dependencies:
+        try:
+            mutate_result = dependent.immutability_check.mutate_result
+            return_result = dependent.immutability_check.return_result
+            # This is an internal call, return result doesn't matter
+            if mutate_result != 1:
+                return False
+        except Exception as e:
+            return False
+    return True
+
+def method_solve(package):
+    import django_cpp_doc.models as models
+    for record in models.RecordDecl.objects.filter(decl__package=package):
+        for public_view in models.PublicView.objects.filter(record=record):
+            try:
+                method = public_view.decl.method
+                try:
+                    mutate_result = method.immutability_check.mutate_result
+                    return_result = method.immutability_check.return_result
+                except Exception as e:
+                    print("Warning: Record '{}' with unimplemented method '{}'".format(record, method.decl.name))
+                    continue
+                all_dependencies = get_all_dependencies(method)
+                if mutate_result == 1 and check_all_dependencies(record, all_dependencies):
+                    models.ClangImmutabilityCheckMethodResult.objects.get_or_create(method=method,
+                                                                            should_be_const=True)
+                else:
+                    models.ClangImmutabilityCheckMethodResult.objects.get_or_create(method=method,
+                                                                            should_be_const=False)
+            except Exception as e:
+                pass
+
 def main():
-    parser = argparse.ArgumentParser('Run clang compile commands.')
-    parser.add_argument('slug', help='Package slug to run compile commands for')
-    parser.add_argument('version', help='Package version to run compile commands for')
+    parser = argparse.ArgumentParser('Analyze a package using const-checker.')
+    parser.add_argument('slug', help='Package slug to analyze')
+    parser.add_argument('version', help='Package version to analyze')
     args = parser.parse_args()
 
     package = django_common.get_package(args.slug, args.version)
@@ -311,6 +358,7 @@ def main():
     import_compile_commands(package)
     run_clang_tool(package)
     populate_counts(package)
+    method_solve(package)
 
 if __name__ == '__main__':
     main()
