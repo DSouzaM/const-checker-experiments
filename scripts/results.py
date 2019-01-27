@@ -134,19 +134,19 @@ def results(package):
     print()
     print('## Table II')
     print('  - Has methods: {:.1f}%'.format(
-        100*num_records_has_methods/num_records))
+        100*num_records_has_methods/num_records if num_records > 0 else 0.0))
     print('    - Immutable: {:.1f}%'.format(
-        100*num_records_has_methods_all_const_all_explicit_fields/num_records))
+        100*num_records_has_methods_all_const_all_explicit_fields/num_records if num_records > 0 else 0.0))
     print('    - Query: {:.1f}%'.format(
-        100*num_records_has_methods_all_const_not_all_explicit_fields/num_records))
+        100*num_records_has_methods_all_const_not_all_explicit_fields/num_records if num_records > 0 else 0.0))
     print('    - Mix: {:.1f}%'.format(
-        100*num_records_has_methods_some_const/num_records))
+        100*num_records_has_methods_some_const/num_records if num_records > 0 else 0.0))
     print('    - Throwaway: {:.1f}%'.format(
-        100*num_records_has_methods_no_const_has_fields/num_records))
+        100*num_records_has_methods_no_const_has_fields/num_records if num_records > 0 else 0.0))
     print('    - Unannotated: {:.1f}%'.format(
-        100*num_records_has_methods_no_const_no_fields/num_records))
+        100*num_records_has_methods_no_const_no_fields/num_records if num_records > 0 else 0.0))
     print('  - Only fields: {:.1f}%'.format(
-        100*num_records_only_fields/num_records))
+        100*num_records_only_fields/num_records if num_records > 0 else 0.0))
     print()
     print('## Table III-VII')
     print('  - Immutable', '&', num_records_has_methods_all_const_all_explicit_fields,
@@ -175,14 +175,14 @@ def results(package):
             print('  - ', get_link(record), record)
     print()
     print('## Figure 4')
-    print('  - non-const methods: {:.0f}%'.format(100.0 * num_mutable_methods / num_methods))
-    print('    -  easily const-able: {:.0f}%'.format(100.0 * num_mutable_easily / num_mutable_methods))
-    print('  - const methods: {:.0f}%'.format(100.0 * num_const_methods / num_methods))
-    print('    - easily const-able: {:.0f}%'.format(100.0 * num_const_easily / num_const_methods))
+    print('  - non-const methods: {:.0f}%'.format(100.0 * num_mutable_methods / num_methods if num_methods > 0 else 0.0))
+    print('    -  easily const-able: {:.0f}%'.format(100.0 * num_mutable_easily / num_mutable_methods if num_mutable_methods > 0 else 0.0))
+    print('  - const methods: {:.0f}%'.format(100.0 * num_const_methods / num_methods if num_methods > 0 else 0.0))
+    print('    - easily const-able: {:.0f}%'.format(100.0 * num_const_easily / num_const_methods if num_const_methods > 0 else 0.0))
     print()
     print('## Table VIII')
     print('  - # non-trivial classes:', num_non_trivial_records)
-    print('  - % immutable classes (developer-written): {:.0f}%'.format(100.0 * len(records_immutable_non_trivial) / num_non_trivial_records))
+    print('  - % immutable classes (developer-written): {:.0f}%'.format(100.0 * len(records_immutable_non_trivial) / num_non_trivial_records if num_non_trivial_records > 0 else 0.0))
 def main():
     parser = argparse.ArgumentParser('Show results.')
     parser.add_argument('slug', help='Package slug to show results for')
