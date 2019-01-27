@@ -128,6 +128,8 @@ def results(package):
     def get_link(r):
         return 'http://localhost:8000/package/{}/{}/decl/{}'.format(package.package_name.slug, package.version, r.decl.pk)
 
+    print('#', package.package_name.name, package.version)
+    print()
     print('## Table I')
     print('  - Classes:', num_records)
     print('  - Methods:', num_methods)
