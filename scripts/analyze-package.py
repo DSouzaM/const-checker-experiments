@@ -62,6 +62,17 @@ def wait_for_queue(queue):
                     print(' '.join(q.args))
                     sys.exit(1)
 
+def wait_for_empty_queue(queue):
+    while len(queue) != 0:
+        time.sleep(1)
+        for q in queue:
+            r = q.poll()
+            if r is not None:
+                queue.remove(q)
+                if r != 0:
+                    print(' '.join(q.args))
+                    sys.exit(1)
+
 def run_clang_tool(package):
     queue = []
     for cc in django_cpp_doc.models.CompileCommand.objects.filter(package=package):
@@ -71,8 +82,7 @@ def run_clang_tool(package):
         wait_for_queue(queue)
         print('\033[1;33m{}\033[0;33m {}\033[m'.format(cc.id, cc.file.path))
         queue.append(spawn_process(cc.id))
-    wait_for_queue(queue)
-    
+    wait_for_empty_queue(queue)
     
 def populate_counts(package):
     import django_cpp_doc.models as models
