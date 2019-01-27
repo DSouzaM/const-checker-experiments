@@ -85,8 +85,6 @@ def results(package):
                 if rc.num_fields == 0:
                     num_records_has_methods_no_const_no_fields += 1
                     records_has_methods_no_const_no_fields.append(rc.record)
-                    if rc.num_methods > 3:
-                        records_all_mutating_non_trivial.append(rc.record)
                 else:
                     num_records_has_methods_no_const_has_fields += 1
             elif rc.num_const_methods == rc.num_methods:
@@ -185,6 +183,7 @@ def results(package):
     print('## Table VIII')
     print('  - # non-trivial classes:', num_non_trivial_records)
     print('  - % immutable classes (developer-written): {:.0f}%'.format(100.0 * len(records_immutable_non_trivial) / num_non_trivial_records if num_non_trivial_records > 0 else 0.0))
+    print('  - % unannotated classes (developer-written): {:.0f}%'.format(100.0 * len(records_all_mutating_non_trivial) / num_non_trivial_records if num_non_trivial_records > 0 else 0.0))
 def main():
     parser = argparse.ArgumentParser('Show results.')
     parser.add_argument('slug', help='Package slug to show results for')
