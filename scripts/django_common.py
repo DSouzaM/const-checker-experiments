@@ -49,3 +49,6 @@ def get_package(slug, version):
         'name': names[slug] if slug in names else slug})
     package, _ = Package.objects.get_or_create(package_name=package_name, version=version)
     return package
+
+def get_link(package, record):
+    return 'http://localhost:8000/package/{}/{}/decl/{}'.format(package.package_name.slug, package.version, record.decl.pk)

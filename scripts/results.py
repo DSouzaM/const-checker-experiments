@@ -123,9 +123,6 @@ def results(package):
     num_mutable_methods = models.ClangImmutabilityCheckMethodResult.objects.filter(method__decl__package=package, method__is_const=False).count()
     num_mutable_easily = models.ClangImmutabilityCheckMethodResult.objects.filter(method__decl__package=package, method__is_const=False, should_be_const=True).count()
 
-    def get_link(r):
-        return 'http://localhost:8000/package/{}/{}/decl/{}'.format(package.package_name.slug, package.version, r.decl.pk)
-
     print('#', package.package_name.name, package.version)
     print()
     print('## Table I')
@@ -158,21 +155,21 @@ def results(package):
     if len(records_immutable_non_trivial) <= MAX_SAMPLES:
         print('### Immutable')
         for record in records_immutable_non_trivial:
-            print('  - ', get_link(record), record)
+            print('  - ', django_common.get_link(package, record), record)
     else:
         print('### Immutable ({} samples)'.format(MAX_SAMPLES))
         for record in random.sample(records_immutable_non_trivial, MAX_SAMPLES):
-            print('  - ', get_link(record), record)
+            print('  - ', django_common.get_link(package, record), record)
 
     print()
     if len(records_all_mutating_non_trivial) <= MAX_SAMPLES:
         print('### All-mutating')
         for record in records_all_mutating_non_trivial:
-            print('  - ', get_link(record), record)
+            print('  - ', django_common.get_link(package, record), record)
     else:
         print('### All-mutating ({} samples)'.format(MAX_SAMPLES))
         for record in random.sample(records_all_mutating_non_trivial, MAX_SAMPLES):
-            print('  - ', get_link(record), record)
+            print('  - ', django_common.get_link(package, record), record)
     print()
     print('## Figure 4')
     print('  - non-const methods: {:.0f}%'.format(100.0 * num_mutable_methods / num_methods if num_methods > 0 else 0.0))
