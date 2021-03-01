@@ -1,0 +1,39 @@
+# fish 2.5.0
+
+## Table I
+  - Classes: 129
+  - Methods: 299
+
+## Table II
+  - Has methods: 69.0%
+    - Immutable: 6.2%
+    - Query: 17.8%
+    - Mix: 20.9%
+    - Throwaway: 8.5%
+    - Unannotated: 15.5%
+  - Only fields: 31.0%
+
+## Table III-VII
+  - Immutable & 8 & 0
+  - All-mutating & 20 & 6
+
+### Immutable
+
+### All-mutating
+  -  autoload_t
+  -  completion_autoload_t
+  -  function_autoload_t
+  -  lru_cache_t::iterator
+  -  scoped_rwlock
+  -  test_expressions::test_parser
+
+## Figure 4
+  - non-const methods: 60%
+    -  easily const-able: 10%
+  - const methods: 40%
+    - easily const-able: 52%
+
+## Table VIII
+  - # non-trivial classes: 29
+  - % immutable classes (developer-written): 0%
+  - % unannotated classes (developer-written): 21%

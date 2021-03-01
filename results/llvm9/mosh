@@ -1,0 +1,33 @@
+# Mosh 1.2.6
+
+## Table I
+  - Classes: 74
+  - Methods: 302
+
+## Table II
+  - Has methods: 91.9%
+    - Immutable: 6.8%
+    - Query: 4.1%
+    - Mix: 70.3%
+    - Throwaway: 2.7%
+    - Unannotated: 8.1%
+  - Only fields: 8.1%
+
+## Table III-VII
+  - Immutable & 5 & 0
+  - All-mutating & 6 & 0
+
+### Immutable
+
+### All-mutating
+
+## Figure 4
+  - non-const methods: 53%
+    -  easily const-able: 6%
+  - const methods: 47%
+    - easily const-able: 55%
+
+## Table VIII
+  - # non-trivial classes: 47
+  - % immutable classes (developer-written): 0%
+  - % unannotated classes (developer-written): 0%

@@ -154,22 +154,22 @@ def results(package):
     print()
     if len(records_immutable_non_trivial) <= MAX_SAMPLES:
         print('### Immutable')
-        for record in records_immutable_non_trivial:
-            print('  - ', django_common.get_link(package, record), record)
+        for record in sorted(map(str, records_immutable_non_trivial)):
+            print('  - ', record)
     else:
         print('### Immutable ({} samples)'.format(MAX_SAMPLES))
-        for record in random.sample(records_immutable_non_trivial, MAX_SAMPLES):
-            print('  - ', django_common.get_link(package, record), record)
+        for record in sorted(map(str, random.sample(records_immutable_non_trivial, MAX_SAMPLES))):
+            print('  - ', record)
 
     print()
     if len(records_all_mutating_non_trivial) <= MAX_SAMPLES:
         print('### All-mutating')
-        for record in records_all_mutating_non_trivial:
-            print('  - ', django_common.get_link(package, record), record)
+        for record in sorted(map(str, records_all_mutating_non_trivial)):
+            print('  - ', record)
     else:
         print('### All-mutating ({} samples)'.format(MAX_SAMPLES))
-        for record in random.sample(records_all_mutating_non_trivial, MAX_SAMPLES):
-            print('  - ', django_common.get_link(package, record), record)
+        for record in sorted(map(str, random.sample(records_all_mutating_non_trivial, MAX_SAMPLES))):
+            print('  - ', record)
     print()
     print('## Figure 4')
     print('  - non-const methods: {:.0f}%'.format(100.0 * num_mutable_methods / num_methods if num_methods > 0 else 0.0))

@@ -50,7 +50,7 @@ build() {
 
   cd "$srcdir/$pkgbase-$pkgver"
   ./configure --prefix=/usr
-  bear make
+  bear -- make
 }
 
 check() {

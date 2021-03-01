@@ -68,7 +68,7 @@ build() {
     -DOPENCV_EXTRA_MODULES_PATH="$srcdir/opencv_contrib-$pkgver/modules" \
     .
 
-  bear make
+  bear -- make
 }
 
 package_opencv() {

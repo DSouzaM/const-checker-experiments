@@ -29,7 +29,7 @@ build() {
   cd fish-shell-${pkgver}
   CC=clang CXX=clang++ ./configure --prefix=/usr \
     --sysconfdir=/etc
-  bear make
+  bear -- make
 }
 
 package() {

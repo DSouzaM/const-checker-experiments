@@ -111,7 +111,7 @@ build() {
     -DLLVM_BINUTILS_INCDIR=/usr/include \
     ..
 
-  bear make -j2
+  bear -- make -j2
   make ocaml_doc
 
   # Disable automatic installation of components that go into subpackages

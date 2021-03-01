@@ -1,0 +1,41 @@
+# libsequence 1.8.7
+
+## Table I
+  - Classes: 33
+  - Methods: 199
+
+## Table II
+  - Has methods: 87.9%
+    - Immutable: 48.5%
+    - Query: 3.0%
+    - Mix: 33.3%
+    - Throwaway: 3.0%
+    - Unannotated: 0.0%
+  - Only fields: 12.1%
+
+## Table III-VII
+  - Immutable & 16 & 8
+  - All-mutating & 0 & 0
+
+### Immutable
+  -  Sequence::Comeron95
+  -  Sequence::FST
+  -  Sequence::PolySIM
+  -  Sequence::PolySNP
+  -  Sequence::RedundancyCom95
+  -  Sequence::Sites
+  -  Sequence::coalsim::sfs_times
+  -  Sequence::shortestPath
+
+### All-mutating
+
+## Figure 4
+  - non-const methods: 9%
+    -  easily const-able: 17%
+  - const methods: 91%
+    - easily const-able: 40%
+
+## Table VIII
+  - # non-trivial classes: 16
+  - % immutable classes (developer-written): 50%
+  - % unannotated classes (developer-written): 0%

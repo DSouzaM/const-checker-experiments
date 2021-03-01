@@ -1,0 +1,35 @@
+# Ninja 1.7.2
+
+## Table I
+  - Classes: 36
+  - Methods: 165
+
+## Table II
+  - Has methods: 88.9%
+    - Immutable: 2.8%
+    - Query: 5.6%
+    - Mix: 47.2%
+    - Throwaway: 13.9%
+    - Unannotated: 19.4%
+  - Only fields: 11.1%
+
+## Table III-VII
+  - Immutable & 1 & 0
+  - All-mutating & 7 & 2
+
+### Immutable
+
+### All-mutating
+  -  (anonymous namespace)::DryRunCommandRunner
+  -  Lexer
+
+## Figure 4
+  - non-const methods: 78%
+    -  easily const-able: 9%
+  - const methods: 22%
+    - easily const-able: 72%
+
+## Table VIII
+  - # non-trivial classes: 17
+  - % immutable classes (developer-written): 0%
+  - % unannotated classes (developer-written): 12%

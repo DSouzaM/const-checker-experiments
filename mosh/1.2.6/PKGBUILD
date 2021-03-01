@@ -20,7 +20,7 @@ build() {
 
   ./autogen.sh
   CC=clang CXX=clang++ ./configure --prefix=/usr
-  bear make
+  bear -- make
 }
 
 package() {

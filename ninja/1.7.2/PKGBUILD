@@ -19,7 +19,7 @@ sha1sums=('c210370c5650177fd8f0bb566dac16d030d212e7')
 build() {
   cd ninja-$pkgver
 
-  CC=clang CXX=clang++ bear python2 configure.py --bootstrap
+  CC=clang CXX=clang++ bear -- python2 configure.py --bootstrap
   emacs -Q --batch -f batch-byte-compile misc/ninja-mode.el
 }
 
